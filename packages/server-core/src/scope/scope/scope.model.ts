@@ -28,6 +28,7 @@ export default (app: Application) => {
     ;(Scope as any).belongsTo(models.user, { foreignKey: 'userId', allowNull: true })
     ;(Scope as any).belongsTo(models.group, { foreignKey: 'groupId', allowNull: true })
     ;(Scope as any).belongsTo(models.scopeType, { foreignKey: 'type' })
+    ;(Scope as any).belongsTo(models.organization, { foreignKey: 'organizationId', allowNull: true })
   }
 
   return Scope
