@@ -61,5 +61,9 @@ export default (app: Application) => {
     }
   )
 
+  ;(ClientSetting as any).associate = (models: any): void => {
+      ;(ClientSetting as any).belongsTo(models.organization, { foreignKey: 'organizationId', allowNull: true })
+  }
+
   return ClientSetting
 }

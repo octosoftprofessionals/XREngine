@@ -40,7 +40,9 @@ export default (app: Application) => {
     }
   )
 
-  ;(Project as any).associate = (models: any): void => {}
+  ;(Project as any).associate = (models: any): void => {
+        (Project as any).belongsTo(models.organization, { foreignKey: 'organizationId', allowNull: false })
+  }
 
   return Project
 }

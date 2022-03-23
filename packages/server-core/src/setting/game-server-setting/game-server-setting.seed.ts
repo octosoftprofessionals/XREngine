@@ -12,7 +12,8 @@ export const gameServerSeed = {
       releaseName: process.env.RELEASE_NAME || null,
       port: process.env.GAMESERVER_PORT || '3031',
       mode: process.env.GAMESERVER_MODE || 'dev',
-      locationName: process.env.PRELOAD_LOCATION_NAME || null
+      locationName: process.env.PRELOAD_LOCATION_NAME || null,
+      organizationId: 'bab45010-aa1f-11ec-bdec-11299f03b250'
     }
   ]
 }

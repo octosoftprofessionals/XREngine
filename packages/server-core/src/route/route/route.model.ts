@@ -31,8 +31,8 @@ export default (app: Application) => {
     }
   )
   ;(Route as any).associate = (models: any): void => {
-        (Route as any).belongsTo(models.organization, { foreignKey: 'organizationId', allowNull: false })
-    }
+      (Route as any).belongsTo(models.organization, { foreignKey: 'organizationId', allowNull: false })
+  }
 
   return Route
 }

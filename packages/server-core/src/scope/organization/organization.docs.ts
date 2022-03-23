@@ -1,6 +1,6 @@
 export default {
   definitions: {
-    scope: {
+    organization: {
       type: 'object',
       properties: {
         type: {

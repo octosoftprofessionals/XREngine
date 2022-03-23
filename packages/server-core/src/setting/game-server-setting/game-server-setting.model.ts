@@ -68,5 +68,9 @@ export default (app: Application) => {
     }
   )
 
+  ;(gameServerSetting as any).associate = (models: any): void => {
+        ;(gameServerSetting as any).belongsTo(models.organization, { foreignKey: 'organizationId', allowNull: true })
+    }
+
   return gameServerSetting
 }

@@ -203,7 +203,8 @@ export class IdentityProvider<T = IdentityProviderInterface> extends Service<T> 
       config.scopes.guest.forEach(async (el) => {
         await this.app.service('scope').create({
           type: el,
-          userId: userId
+          userId: userId,
+          organizationId: params.organizationId
         })
       })
     }
@@ -213,7 +214,8 @@ export class IdentityProvider<T = IdentityProviderInterface> extends Service<T> 
         config.scopes.guest.forEach(async (el) => {
           await this.app.service('scope').create({
             type: el,
-            userId: userId
+            userId: userId,
+            organizationId: params.organizationId
           })
         })
       }
@@ -225,7 +227,7 @@ export class IdentityProvider<T = IdentityProviderInterface> extends Service<T> 
       // in dev mode, add all scopes to the first user made an admin
 
       for (const { type } of scopeTypeSeed.templates) {
-        await this.app.service('scope').create({ userId: userId, type })
+        await this.app.service('scope').create({ userId: userId, type, organizationId: 'bab45010-aa1f-11ec-bdec-11299f03b250' })
       }
 
       const authService = new AuthenticationService(this.app, 'authentication')

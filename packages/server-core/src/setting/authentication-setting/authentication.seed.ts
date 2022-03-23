@@ -1,4 +1,7 @@
 import config from '../../appconfig'
+import { isDev } from '@xrengine/common/src/utils/isDev'
+
+const clientUrl = `https:${isDev ? 'localhost:3000' : `app.${config.server.rootDomain}`}`
 
 export const authenticationSeed = {
   path: 'authentication-setting',
@@ -12,6 +15,7 @@ export const authenticationSeed = {
         { smsMagicLink: true },
         { emailMagicLink: true },
         { local: true },
+        { discord: true },
         { facebook: true },
         { github: true },
         { google: true },
@@ -29,11 +33,12 @@ export const authenticationSeed = {
         numBytes: 16
       }),
       callback: JSON.stringify({
-        facebook: process.env.FACEBOOK_CALLBACK_URL || `${config.client.url}/auth/oauth/facebook`,
-        github: process.env.GITHUB_CALLBACK_URL || `${config.client.url}/auth/oauth/github`,
-        google: process.env.GOOGLE_CALLBACK_URL || `${config.client.url}/auth/oauth/google`,
-        linkedin: process.env.LINKEDIN_CALLBACK_URL || `${config.client.url}/auth/oauth/linkedin`,
-        twitter: process.env.TWITTER_CALLBACK_URL || `${config.client.url}/auth/oauth/twitter`
+        discord: `${clientUrl}/auth/oauth/discord`,
+        facebook: `${clientUrl}/auth/oauth/facebook`,
+        github: `${clientUrl}/auth/oauth/github`,
+        google: `${clientUrl}/auth/oauth/google`,
+        linkedin: `${clientUrl}/auth/oauth/linkedin`,
+        twitter: `${clientUrl}/auth/oauth/twitter`,
       }),
       oauth: JSON.stringify({
         defaults: JSON.stringify({
@@ -42,6 +47,14 @@ export const authenticationSeed = {
               ? config.server.hostname
               : config.server.hostname + ':' + config.server.port,
           protocol: 'https'
+        }),
+        discord: JSON.stringify({
+          key: process.env.DISCORD_CLIENT_ID,
+          secret: process.env.DISCORD_CLIENT_SECRET,
+          scope: ['identify', 'email'],
+          customParams: {
+            prompt: 'none'
+          }
         }),
         facebook: JSON.stringify({
           key: process.env.FACEBOOK_CLIENT_ID,

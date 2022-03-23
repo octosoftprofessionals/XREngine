@@ -6,7 +6,8 @@
   "private": true,
   "workspaces": [
     "packages/*",
-    "packages/projects/projects/*"
+    "packages/projects/projects/*",
+    "packages/projects/organizations/*/projects/**"
   ],
   "keywords": [
     "three",

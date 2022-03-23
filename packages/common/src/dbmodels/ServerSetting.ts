@@ -18,4 +18,5 @@ export interface ServerSettingInterface {
   gitPem: string
   local: boolean
   releaseName: string
+  rootDomain: string
 }

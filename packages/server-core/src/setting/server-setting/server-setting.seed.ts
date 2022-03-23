@@ -28,7 +28,9 @@ const server = {
   keyPath: appRootPath.path.toString() + '/' + process.env.KEY,
   gitPem: null,
   local: process.env.LOCAL === 'true',
-  releaseName: process.env.RELEASE_NAME || null!
+  releaseName: process.env.RELEASE_NAME || null!,
+  organizationId: 'bab45010-aa1f-11ec-bdec-11299f03b250',
+  rootDomain: process.env.ROOT_DOMAIN || 'localhost:3000'
 }
 
 server.url =

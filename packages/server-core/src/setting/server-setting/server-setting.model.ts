@@ -86,7 +86,11 @@ export default (app: Application) => {
       releaseName: {
         type: DataTypes.STRING,
         allowNull: true
-      }
+      },
+        rootDomain: {
+          type: DataTypes.STRING,
+            allowNull: false
+        }
     },
     {
       hooks: {
@@ -96,6 +100,10 @@ export default (app: Application) => {
       }
     }
   )
+
+  ;(ServerSetting as any).associate = (models: any): void => {
+    ;(ServerSetting as any).belongsTo(models.organization, { foreignKey: 'organizationId', allowNull: true })
+}
 
   return ServerSetting
 }

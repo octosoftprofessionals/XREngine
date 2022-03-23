@@ -1,12 +1,12 @@
 import { Application } from '../../../declarations'
-import { Scope } from './organization.class'
-import scopeDocs from './organization.docs'
+import { Organization } from './organization.class'
+import organizationDocs from './organization.docs'
 import hooks from './organization.hooks'
 import createModel from './organization.model'
 
 declare module '@xrengine/common/declarations' {
   interface ServiceTypes {
-    scope: Scope
+    organization: Organization
   }
 }
 
@@ -17,11 +17,11 @@ export default (app: Application): void => {
     multi: true
   }
 
-  const event = new Scope(options, app)
-  event.docs = scopeDocs
-  app.use('scope', event)
+  const event = new Organization(options, app)
+  event.docs = organizationDocs
+  app.use('organization', event)
 
-  const service = app.service('scope')
+  const service = app.service('organization')
 
   service.hooks(hooks)
 }

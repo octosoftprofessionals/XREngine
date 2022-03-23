@@ -1,8 +1,7 @@
 import { Sequelize } from 'sequelize'
 
 import { isDev } from '@xrengine/common/src/utils/isDev'
-import config from '@xrengine/server-core/src/appconfig'
-import seeder from '@xrengine/server-core/src/util/seeder'
+import appconfig from '@xrengine/server-core/src/appconfig'
 
 import { Application } from '../declarations'
 import { copyDefaultProject, uploadLocalProjectToProvider } from './projects/project/project.class'
@@ -22,12 +21,12 @@ const settingsServiceNames = [
 
 export default (app: Application): void => {
   try {
-    const { forceRefresh } = config.db
+    const { forceRefresh } = appconfig.db
 
     console.log('Starting app')
 
     const sequelize = new Sequelize({
-      ...(config.db as any),
+      ...(appconfig.db as any),
       logging: forceRefresh ? console.log : false,
       define: {
         freezeTableName: true
@@ -94,11 +93,26 @@ export default (app: Application): void => {
                   for (let template of templates) {
                     let isSeeded
                     if (settingsServiceNames.indexOf(config.path) > -1) {
+                      if (config.path === 'client-setting') {
+                        template.url = isDev ? 'https://localhost:3000' : `https://app.${appconfig.server.rootDomain}`
+                      }
+                      if (config.path === 'gameserver-setting') {
+                        template.clientHost = isDev ? 'localhost:3000' : `app.${appconfig.server.rootDomain}`
+                        template.domain = isDev ? 'localhost:3031' : `gameserver-app.${appconfig.server.rootDomain}`
+                      }
+                      if (config.path === 'server-setting') {
+                        template.rootDomain = isDev ? 'localhost:3000' : `app.${appconfig.server.rootDomain}`
+                        template.hostname = isDev ? 'localhost' : `api-app.${appconfig.server.rootDomain}`
+                        template.clientHost = isDev ? 'localhost:3000' : `app.${appconfig.server.rootDomain}`
+                        template.url = isDev ? 'localhost:3030' : `https://api-app.${appconfig.server.rootDomain}`
+                      }
                       const result = await service.find()
                       isSeeded = result.total > 0
                     } else {
                       const searchTemplate = {}
 
+                      if (config.path === 'organization')
+                        template.subdomain = isDev ? 'localhost:3000' : `app.${appconfig.server.rootDomain}`
                       const sequelizeModel = service.Model
                       const uniqueField = Object.values(sequelizeModel.rawAttributes).find(
                         (value: any) => value.unique

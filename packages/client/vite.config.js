@@ -11,16 +11,16 @@ import { getClientSetting } from './scripts/getClientSettings'
 import appRootPath from 'app-root-path'
 
 const copyProjectDependencies = () => {
-  if(!fs.existsSync(path.resolve(__dirname, '../projects/projects/'))){
+  if(!fs.existsSync(path.resolve(__dirname, '../projects/organizations/bab45010-aa1f-11ec-bdec-11299f03b250/projects/'))){
     // create directory
-    fs.mkdirSync(path.resolve(__dirname, '../projects/projects/'))
+    fs.mkdirSync(path.resolve(__dirname, '../projects/organizations/bab45010-aa1f-11ec-bdec-11299f03b250/projects/'), { recursive: true })
   }
   const projects = fs
-    .readdirSync(path.resolve(__dirname, '../projects/projects/'), { withFileTypes: true })
+    .readdirSync(path.resolve(__dirname, '../projects/organizations/bab45010-aa1f-11ec-bdec-11299f03b250/projects/'), { withFileTypes: true })
     .filter((dirent) => dirent.isDirectory())
     .map((dirent) => dirent.name)
   for (const project of projects) {
-    const staticPath = path.resolve(__dirname, `../projects/projects/`, project, 'public')
+    const staticPath = path.resolve(__dirname, `../projects/organizations/bab45010-aa1f-11ec-bdec-11299f03b250/projects/`, project, 'public')
     if(fs.existsSync(staticPath)) {
       fsExtra.copySync(staticPath, path.resolve(__dirname, `public/projects`, project))
     }

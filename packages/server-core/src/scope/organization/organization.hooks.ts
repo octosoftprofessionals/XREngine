@@ -5,7 +5,7 @@ import restrictUserRole from '../../hooks/restrict-user-role'
 
 export default {
   before: {
-    all: [authenticate(), iff(isProvider('external'), restrictUserRole('admin') as any)],
+    all: [],
     find: [],
     get: [],
     create: [],

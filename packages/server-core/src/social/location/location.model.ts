@@ -62,6 +62,7 @@ export default (app: Application) => {
     ;(location as any).hasOne(models.location_settings, { onDelete: 'cascade' })
     ;(location as any).hasMany(models.location_ban)
     ;(location as any).hasMany(models.bot, { foreignKey: 'locationId' })
+    ;(location as any).belongsTo(models.organization, { foreignKey: 'organizationId', allowNull: false })
   }
 
   return location

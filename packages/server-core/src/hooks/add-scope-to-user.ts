@@ -16,7 +16,8 @@ export default () => {
         config.scopes.user.forEach(async (el) => {
           await context.app.service('scope').create({
             type: el,
-            userId: context.arguments[0]
+            userId: context.arguments[0],
+            organizationId: context.params.organizationId
           })
         })
       }
@@ -25,7 +26,8 @@ export default () => {
         scopeTypeSeed.templates.forEach(async (el) => {
           await context.app.service('scope').create({
             type: el.type,
-            userId: context.arguments[0]
+            userId: context.arguments[0],
+            organizationId: context.params.organizationId
           })
         })
       }
@@ -34,7 +36,8 @@ export default () => {
         context.arguments[1]?.scopes?.forEach(async (el) => {
           await context.app.service('scope').create({
             type: el.type,
-            userId: context.arguments[0]
+            userId: context.arguments[0],
+            organizationId: context.params.organizationId
           })
         })
       }
@@ -60,7 +63,8 @@ export default () => {
         scopeTypeSeed.templates.forEach(async (el) => {
           await context.app.service('scope').create({
             type: el.type,
-            userId: context.arguments[0]
+            userId: context.arguments[0],
+            organizationId: context.params.organizationId
           })
         })
       }
@@ -72,7 +76,8 @@ export default () => {
         context.arguments[1]?.scopes?.forEach(async (el) => {
           await context.app.service('scope').create({
             type: el.type,
-            userId: context.arguments[0]
+            userId: context.arguments[0],
+            organizationId: context.params.organizationId
           })
         })
       }

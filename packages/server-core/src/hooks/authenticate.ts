@@ -2,7 +2,7 @@ import * as authentication from '@feathersjs/authentication'
 import { HookContext } from '@feathersjs/feathers'
 
 import config from '../appconfig'
-import { Application } from './../../declarations.d'
+import { Application } from '../../declarations'
 
 const { authenticate } = authentication.hooks
 
@@ -12,6 +12,7 @@ export default () => {
 
     if (!context.params) context.params = {}
     const authHeader = params.headers?.authorization
+    let originHeader = context.params.headers?.origin
     let authSplit
     if (authHeader) authSplit = authHeader.split(' ')
     let token, user
@@ -41,6 +42,11 @@ export default () => {
           }
         })
       : {}
+    if (originHeader) context.params.organization = await (context.app as Application).service('organization').Model.findOne({
+      where: {
+        subdomain: new URL(originHeader).host
+      }
+    })
     return context
   }
 }

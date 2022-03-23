@@ -23,8 +23,9 @@
     "outDir": "./lib"
   },
   "exclude": [
-    "../projects/projects/**",
-    "**/node_modules/**"
+    "./projects/**",
+    "**/node_modules/**",
+    "./organizations/**/projects/**"
   ],
   "include": [
     "./**/*.ts",
