@@ -5,7 +5,7 @@ import addAssociations from '@xrengine/server-core/src/hooks/add-associations'
 
 import addScopeToUser from '../../hooks/add-scope-to-user'
 import authenticate from '../../hooks/authenticate'
-import restrictUserRole from '../../hooks/restrict-user-role'
+import restrictScopeAccess from '../../hooks/restrict-scope-access'
 import logger from '../../logger'
 import getFreeInviteCode from '../../util/get-free-invite-code'
 import { UserDataType } from './user.class'
@@ -94,8 +94,8 @@ export default {
         ]
       })
     ],
-    create: [iff(isProvider('external'), restrictUserRole('admin') as any)],
-    update: [iff(isProvider('external'), restrictUserRole('admin') as any)],
+    create: [iff(isProvider('external'), restrictScopeAccess('super-dmin') as any)],
+    update: [iff(isProvider('external'), restrictScopeAccess('super-admin') as any)],
     patch: [
       iff(isProvider('external'), restrictUserPatch as any),
       addAssociations({
@@ -126,7 +126,7 @@ export default {
       addScopeToUser()
     ],
     remove: [
-      iff(isProvider('external'), restrictUserRole('admin') as any),
+      iff(isProvider('external'), restrictScopeAccess('super-admin') as any),
       async (context: HookContext): Promise<HookContext> => {
         try {
           const userId = context.id

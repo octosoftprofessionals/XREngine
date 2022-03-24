@@ -14,6 +14,7 @@ import { AssetUploadType } from '@xrengine/common/src/interfaces/UploadAssetInte
 import { resolveUser, resolveWalletUser, User, UserSeed, UserSetting } from '@xrengine/common/src/interfaces/User'
 import { UserApiKey } from '@xrengine/common/src/interfaces/UserApiKey'
 import { UserAvatar } from '@xrengine/common/src/interfaces/UserAvatar'
+import { Organization, OrganizationSeed } from '@xrengine/common/src/interfaces/Organization'
 import { isDev } from '@xrengine/common/src/utils/isDev'
 import { Engine } from '@xrengine/engine/src/ecs/classes/Engine'
 import { Network } from '@xrengine/engine/src/networking/classes/Network'
@@ -50,7 +51,8 @@ const state = createState({
   authUser: AuthUserSeed,
   user: UserSeed,
   identityProvider: IdentityProviderSeed,
-  avatarList: [] as Array<UserAvatar>
+  avatarList: [] as Array<UserAvatar>,
+  organization: OrganizationSeed
 })
 
 export type AuthState = typeof state
@@ -106,29 +108,24 @@ store.receptors.push((action: AuthActionType | StoredLocalActionType): void => {
           identityProvider: stored.identityProvider
         })
       }
-      case 'AVATAR_UPDATED': {
+      case 'AVATAR_UPDATED':
         return s.user.merge({ avatarUrl: action.url })
-      }
-      case 'USERNAME_UPDATED': {
+      case 'USERNAME_UPDATED':
         return s.user.merge({ name: action.name })
-      }
-      case 'USER_API_KEY_UPDATED': {
+      case 'USER_API_KEY_UPDATED':
         return s.user.merge({ apiKey: action.apiKey })
-      }
-      case 'USERAVATARID_UPDATED': {
+      case 'USERAVATARID_UPDATED':
         return s.user.merge({ avatarId: action.avatarId })
-      }
-      case 'USER_UPDATED': {
+      case 'USER_UPDATED':
         return s.merge({ user: action.user })
-      }
-      case 'USER_PATCHED': {
+      case 'USER_PATCHED':
         return userPatched(action.params)
-      }
-      case 'UPDATE_USER_SETTINGS': {
+      case 'UPDATE_USER_SETTINGS':
         return s.user.merge({ user_setting: action.data })
-      }
       case 'AVATAR_FETCHED':
         return avatarFetchedReceptor(s, action)
+      case 'ORGANIZATION_FETCHED':
+        return s.organization.merge(action.data)
     }
   }, action.type)
 })
@@ -199,6 +196,7 @@ export const AuthService = {
         }
       }
       if (res) {
+        await AuthService.fetchOrganization()
         if (res['identity-provider']?.id == null) {
           await dispatch(AuthAction.didLogout())
           await (client as any).authentication.reset()
@@ -338,20 +336,18 @@ export const AuthService = {
             (globalThis as any).process.env['VITE_SERVER_PORT']
           }`
         : `https://${(globalThis as any).process.env['VITE_SERVER_HOST']}`
-    {
-      dispatch(AuthAction.actionProcessing(true))
-      const token = accessAuthState().authUser.accessToken.value
-      const path = location?.state?.from || location.pathname
-      const queryString = querystring.parse(window.location.search.slice(1))
-      const redirectObject = {
-        path: path
-      } as any
-      if (queryString.instanceId && queryString.instanceId.length > 0)
-        redirectObject.instanceId = queryString.instanceId
-      window.location.href = `${serverHost}/oauth/${service}?feathers_token=${token}&redirect=${JSON.stringify(
-        redirectObject
-      )}`
-    }
+    dispatch(AuthAction.actionProcessing(true))
+    const token = accessAuthState().authUser.accessToken.value
+    const path = location?.state?.from || location.pathname
+    const queryString = querystring.parse(window.location.search.slice(1))
+    const redirectObject = {
+      path: path
+    } as any
+    if (queryString.instanceId && queryString.instanceId.length > 0)
+      redirectObject.instanceId = queryString.instanceId
+    window.location.href = `${serverHost}/oauth/${service}?feathers_token=${token}&redirect=${JSON.stringify(
+      redirectObject
+    )}`
   },
   loginUserByJwt: async (accessToken: string, redirectSuccess: string, redirectError: string) => {
     const dispatch = useDispatch()
@@ -853,6 +849,17 @@ export const AuthService = {
         store.dispatch(AuthAction.userUpdated(user))
       }
     })
+  },
+  fetchOrganization: async () => {
+    const host = window.location.host
+    console.log('host', host)
+    const organization = await client.service('organization').find({
+      query: {
+        subdomain: host
+      }
+    })
+    console.log('organization', organization)
+    store.dispatch(AuthAction.organizationFetched(organization.data[0]))
   }
 }
 
@@ -1034,6 +1041,12 @@ export const AuthAction = {
     return {
       type: 'USER_API_KEY_UPDATED' as const,
       apiKey: apiKey
+    }
+  },
+  organizationFetched: (organization: Organization) => {
+    return {
+      type: 'ORGANIZATION_FETCHED' as const,
+      data: organization
     }
   }
 }

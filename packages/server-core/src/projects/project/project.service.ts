@@ -1,4 +1,4 @@
-import restrictUserRole from '@xrengine/server-core/src/hooks/restrict-user-role'
+import restrictScopeAccess from '../../hooks/restrict-scope-access'
 
 import { Application } from '../../../declarations'
 import authenticate from '../../hooks/authenticate'
@@ -52,13 +52,13 @@ export default (app: Application): void => {
 
   app.service('project-build').hooks({
     before: {
-      patch: [authenticate(), restrictUserRole('admin')]
+      patch: [authenticate(), restrictScopeAccess('projects:write')]
     }
   })
 
   app.service('project-invalidate').hooks({
     before: {
-      patch: [authenticate(), restrictUserRole('admin')]
+      patch: [authenticate(), restrictScopeAccess('projects:write')]
     }
   })
 

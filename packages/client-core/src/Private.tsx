@@ -1,10 +1,16 @@
 import React from 'react'
-import { Route } from 'react-router'
+import { Redirect, Route } from 'react-router'
 
 import Dashboard from './user/components/Dashboard/Dashboard'
+import {useAuthState} from "./user/services/AuthService";
 
-const PrivateRoute = ({ component: Component, ...rest }) => {
+const PrivateRoute = ({ scope: scope, component: Component, ...rest }) => {
+  const admin = useAuthState().user
+  const organization = useAuthState().organization
+  const scopes = admin?.scopes?.value || []
+  const readScope = scopes.find(s => s.type === `${scope}:read` && s.organizationId === organization.id.value)
   return (
+    readScope ?
     <Route
       {...rest}
       render={(props) => (
@@ -12,7 +18,8 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
           <Component {...props} />
         </Dashboard>
       )}
-    />
+    /> : admin?.id?.value?.length === 0 ? <div/> :
+    <Redirect to={{ pathname: '/login', state: { from: '/admin' } }} />
   )
 }
 

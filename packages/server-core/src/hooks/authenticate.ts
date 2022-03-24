@@ -13,6 +13,7 @@ export default () => {
     if (!context.params) context.params = {}
     const authHeader = params.headers?.authorization
     let originHeader = context.params.headers?.origin
+    let refererHeader = context.params.headers?.referer
     let authSplit
     if (authHeader) authSplit = authHeader.split(' ')
     let token, user
@@ -47,6 +48,14 @@ export default () => {
         subdomain: new URL(originHeader).host
       }
     })
+    if (!originHeader && refererHeader) {
+      console.log('Getting organization from refererHeader', refererHeader)
+      context.params.organization = await (context.app as Application).service('organization').Model.findOne({
+        where: {
+          subdomain: new URL(refererHeader).host
+        }
+      })
+    }
     return context
   }
 }

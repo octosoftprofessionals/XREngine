@@ -1,11 +1,11 @@
 import { iff, isProvider } from 'feathers-hooks-common'
 
 import authenticate from '../../hooks/authenticate'
-import restrictUserRole from '../../hooks/restrict-user-role'
+import restrictScopeAccess from '../../hooks/restrict-scope-access'
 
 export default {
   before: {
-    all: [authenticate(), iff(isProvider('external'), restrictUserRole('admin') as any)],
+    all: [authenticate(), iff(isProvider('external'), restrictScopeAccess('instance:write') as any)],
     find: [],
     get: [],
     create: [],

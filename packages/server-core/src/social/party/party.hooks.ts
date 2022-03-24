@@ -7,7 +7,7 @@ import removePartyUsers from '@xrengine/server-core/src/hooks/remove-party-users
 
 import addAssociations from '../../hooks/add-associations'
 import authenticate from '../../hooks/authenticate'
-import restrictUserRole from '../../hooks/restrict-user-role'
+import restrictScopeAccess from '../../hooks/restrict-scope-access'
 import { UserDataType } from '../../user/user/user.class'
 
 // Don't remove this comment. It's needed to format import lines nicely.
@@ -16,7 +16,7 @@ export default {
   before: {
     all: [authenticate()],
     find: [
-      iff(isProvider('external'), restrictUserRole('admin') as any),
+      iff(isProvider('external'), restrictScopeAccess('party:write') as any),
       addAssociations({
         models: [
           {

@@ -6,8 +6,9 @@ export const userHasAccessHook = (scope: string) => {
   return Boolean(hasScope || isAdmin)
 }
 
-export const userHasAccess = (scope: string) => {
-  const hasScope = accessAuthState().user?.scopes?.value?.find((r) => r.type === scope)
+export const userHasAccess = (scope: string, host: string) => {
+  const organization = accessAuthState().organization.value
+  const hasScope = accessAuthState().user?.scopes?.value?.find((r) => r.type === scope && r.organizationId === organization.id)
   const isAdmin = accessAuthState().user?.userRole?.value === 'admin'
   return Boolean(hasScope || isAdmin)
 }

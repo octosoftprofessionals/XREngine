@@ -23,6 +23,10 @@ export default (app: Application) => {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true
+      },
+      ownerId: {
+        type: DataTypes.UUID,
+        allowNull: true
       }
     },
     {

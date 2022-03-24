@@ -20,14 +20,14 @@ const EditorProtectedRoutes = () => {
   }, [])
 
   useEffect(() => {
-    if (user.scopes.value && user.userRole.value) {
-      const hasAccess = userHasAccess('editor:write')
+    if (user.scopes.value) {
+      const hasAccess = userHasAccess('editor:write', window.location.host)
       if (!hasAccess) {
         history.push('/login')
         setAuthorized(false)
       } else setAuthorized(true)
     }
-  }, [user.scopes, user.userRole])
+  }, [user.scopes])
 
   if (isAuthorized == null) return <div>Authorizing...</div>
 

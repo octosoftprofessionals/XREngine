@@ -3,6 +3,7 @@ import { Params } from '@feathersjs/feathers'
 import { Application } from '../../../declarations'
 import config from '../../appconfig'
 import CustomOAuthStrategy from './custom-oauth'
+import makeUserOrgOwner from "../../util/make-user-org-owner";
 
 export class GithubStrategy extends CustomOAuthStrategy {
   constructor(app: Application) {
@@ -36,6 +37,7 @@ export class GithubStrategy extends CustomOAuthStrategy {
     await this.app.service('user').patch(entity.userId, {
       userRole: user?.userRole === 'admin' || adminCount === 0 ? 'admin' : 'user'
     })
+    await makeUserOrgOwner(user.id, this.app, params)
     const apiKey = await this.app.service('user-api-key').find({
       query: {
         userId: entity.userId

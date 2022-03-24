@@ -4,6 +4,7 @@ import moment from 'moment'
 import { Application } from '../../../declarations'
 import logger from '../../logger'
 import Paginated from '../../types/PageObject'
+import makeUserOrgOwner from "../../util/make-user-org-owner";
 
 interface Data {}
 
@@ -71,6 +72,7 @@ export class Login implements ServiceMethods<Data> {
         await this.app.service('user').patch(identityProvider.userId, {
           userRole: 'admin'
         })
+      await makeUserOrgOwner(identityProvider.userId, this.app, params!)
       const apiKey = await this.app.service('user-api-key').find({
         query: {
           userId: identityProvider.userId

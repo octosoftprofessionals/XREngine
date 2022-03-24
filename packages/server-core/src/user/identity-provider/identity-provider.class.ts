@@ -14,6 +14,7 @@ import { scopeTypeSeed } from '../../scope/scope-type/scope-type.seed'
 import Paginated from '../../types/PageObject'
 import getFreeInviteCode from '../../util/get-free-invite-code'
 import { UserDataType } from '../user/user.class'
+import makeUserOrgOwner from "../../util/make-user-org-owner";
 
 /**
  * A class for identity-provider service
@@ -193,11 +194,15 @@ export class IdentityProvider<T = IdentityProviderInterface> extends Service<T> 
         },
         params
       )
+      console.log('ip create result', result)
     } catch (err) {
+      console.log('IP exists, removing guest user')
       await this.app.service('user').remove(userId)
       throw err
     }
     // DRC
+    console.log('Making user org owner', userId, result.user.id)
+    await makeUserOrgOwner(userId || result.user.id, this.app, params)
 
     if (config.scopes.guest.length) {
       config.scopes.guest.forEach(async (el) => {
@@ -218,16 +223,6 @@ export class IdentityProvider<T = IdentityProviderInterface> extends Service<T> 
             organizationId: params.organizationId
           })
         })
-      }
-
-      const authService = new AuthenticationService(this.app, 'authentication')
-      // this.app.service('authentication')
-      result.accessToken = await authService.createAccessToken({}, { subject: result.id.toString() })
-    } else if (isDev && type === 'admin') {
-      // in dev mode, add all scopes to the first user made an admin
-
-      for (const { type } of scopeTypeSeed.templates) {
-        await this.app.service('scope').create({ userId: userId, type, organizationId: 'bab45010-aa1f-11ec-bdec-11299f03b250' })
       }
 
       const authService = new AuthenticationService(this.app, 'authentication')

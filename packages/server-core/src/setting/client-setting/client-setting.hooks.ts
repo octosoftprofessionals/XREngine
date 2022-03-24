@@ -1,6 +1,6 @@
 import { iff, isProvider } from 'feathers-hooks-common'
 
-import restrictUserRole from '@xrengine/server-core/src/hooks/restrict-user-role'
+import restrictScopeAccess from '../../hooks/restrict-scope-access'
 
 import authenticate from '../../hooks/authenticate'
 
@@ -9,10 +9,10 @@ export default {
     all: [],
     find: [],
     get: [],
-    create: [authenticate(), iff(isProvider('external'), restrictUserRole('admin') as any)],
-    update: [authenticate(), iff(isProvider('external'), restrictUserRole('admin') as any)],
-    patch: [authenticate(), iff(isProvider('external'), restrictUserRole('admin') as any)],
-    remove: [authenticate(), iff(isProvider('external'), restrictUserRole('admin') as any)]
+    create: [authenticate(), iff(isProvider('external'), restrictScopeAccess('super-admin') as any)],
+    update: [authenticate(), iff(isProvider('external'), restrictScopeAccess('super-admin') as any)],
+    patch: [authenticate(), iff(isProvider('external'), restrictScopeAccess('super-admin') as any)],
+    remove: [authenticate(), iff(isProvider('external'), restrictScopeAccess('super-admin') as any)]
   },
 
   after: {

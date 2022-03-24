@@ -5,14 +5,14 @@ import groupPermissionAuthenticate from '@xrengine/server-core/src/hooks/group-p
 import groupUserPermissionAuthenticate from '@xrengine/server-core/src/hooks/group-user-permission-authenticate'
 
 import authenticate from '../../hooks/authenticate'
-import restrictUserRole from '../../hooks/restrict-user-role'
+import restrictScopeAccess from '../../hooks/restrict-scope-access'
 
 export default {
   before: {
     all: [authenticate()],
     find: [iff(isProvider('external'), groupUserPermissionAuthenticate() as any)],
     get: [],
-    create: [iff(isProvider('external'), restrictUserRole('admin') as any)],
+    create: [iff(isProvider('external'), restrictScopeAccess('groups:write') as any)],
     update: [],
     patch: [],
     remove: [groupPermissionAuthenticate()]

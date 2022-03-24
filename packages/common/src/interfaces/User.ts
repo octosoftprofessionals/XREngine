@@ -17,6 +17,7 @@ export interface UserSetting {
 export interface UserScope {
   type: string
   id: string
+  organizationId: string
 }
 
 export interface User {

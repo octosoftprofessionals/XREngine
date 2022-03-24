@@ -6,7 +6,7 @@ import replaceThumbnailLink from '@xrengine/server-core/src/hooks/replace-thumbn
 import attachOwnerIdInQuery from '@xrengine/server-core/src/hooks/set-loggedin-user-in-query'
 
 import authenticate from '../../hooks/authenticate'
-import restrictUserRole from '../../hooks/restrict-user-role'
+import restrictScopeAccess from '../../hooks/restrict-scope-access'
 
 export default {
   before: {
@@ -15,7 +15,7 @@ export default {
     get: [],
     create: [
       authenticate(),
-      restrictUserRole('admin'),
+      restrictScopeAccess('globalAvatars:write'),
       (context: HookContext): HookContext => {
         if (!context.data.uri && context.params.file) {
           const file = context.params.file
@@ -30,9 +30,9 @@ export default {
         return context
       }
     ],
-    update: [authenticate(), restrictUserRole('admin')],
-    patch: [authenticate(), restrictUserRole('admin'), replaceThumbnailLink()],
-    remove: [authenticate(), restrictUserRole('admin'), attachOwnerIdInQuery('userId')]
+    update: [authenticate(), restrictScopeAccess('globalAvatars:write')],
+    patch: [authenticate(), restrictScopeAccess('globalAvatars:write'), replaceThumbnailLink()],
+    remove: [authenticate(), restrictScopeAccess('globalAvatars:write'), attachOwnerIdInQuery('userId')]
   },
 
   after: {
