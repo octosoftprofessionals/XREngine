@@ -222,7 +222,7 @@ export default {
             context.app.service('scope').create({
               type: el.type,
               userId: context.result.id,
-              organizationId: context.params.organizationId
+              organizationId: context.params.organization.id
             })
           })
 

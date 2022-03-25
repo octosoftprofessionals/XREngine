@@ -174,7 +174,7 @@ export class IdentityProvider<T = IdentityProviderInterface> extends Service<T> 
       // in dev mode make the first guest an admin
       // otherwise make the first logged in user an admin
       if (isDev || role === 'user') {
-        type = 'admin'
+        // type = 'admin'
         role = 'admin'
       }
     }
@@ -209,7 +209,7 @@ export class IdentityProvider<T = IdentityProviderInterface> extends Service<T> 
         await this.app.service('scope').create({
           type: el,
           userId: userId,
-          organizationId: params.organizationId
+          organizationId: params.organization.id
         })
       })
     }
@@ -220,7 +220,7 @@ export class IdentityProvider<T = IdentityProviderInterface> extends Service<T> 
           await this.app.service('scope').create({
             type: el,
             userId: userId,
-            organizationId: params.organizationId
+            organizationId: params.organization.id
           })
         })
       }

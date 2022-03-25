@@ -4,8 +4,8 @@ import { OrganizationInterface } from '@xrengine/common/src/dbmodels/Organizatio
 
 import { Application } from '../../../declarations'
 import {Params} from "@feathersjs/feathers";
-import {extractLoggedInUserFromParams} from "../../user/auth-management/auth-management.utils";
 import {scopeTypeSeed} from "../scope-type/scope-type.seed";
+import {UserDataType} from "../../user/user/user.class";
 
 export type OrganizationDataType = OrganizationInterface
 
@@ -20,7 +20,7 @@ export class Organization<T = OrganizationInterface> extends Service<T> {
 
   async create(data: any, params: Params = {}): Promise<T> {
     const org = await super.create(data) as any
-    const loggedInUser = extractLoggedInUserFromParams(params)
+    const loggedInUser = params.user as UserDataType
     if (loggedInUser)
       scopeTypeSeed.templates.forEach(async (el) => {
         await this.app.service('scope').create({

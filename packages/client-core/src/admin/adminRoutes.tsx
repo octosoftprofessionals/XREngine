@@ -89,9 +89,9 @@ const ProtectedRoutes = (props: Props) => {
             <PrivateRoute exact path="/admin/instance" scope="instance" component={instance} />
             <PrivateRoute exact path="/admin/invites" scope="invite" component={invites} />
             <PrivateRoute exact path="/admin/locations" scope="location" component={locations} />
-            <PrivateRoute exact path="/admin/routes" scope="route" component={routes} />
+            <PrivateRoute exact path="/admin/routes" scope="routes" component={routes} />
             {/* <PrivateRoute exact path="/admin/scenes" component={scenes} /> */}
-            <PrivateRoute exact path="/admin/parties" scope="part" component={party} />
+            <PrivateRoute exact path="/admin/parties" scope="party" component={party} />
             <PrivateRoute exact path="/admin/bots" scope="bot" component={botSetting} />
             {/* <PrivateRoute exact path="/admin/armedia" component={arMedia} /> */}
             {/* <PrivateRoute exact path="/admin/armedia" component={arMedia} />

@@ -6,9 +6,11 @@ import { Application } from './../../declarations.d'
 
 export default () => {
   return async (context: HookContext<Application>): Promise<HookContext> => {
+    console.log('add-scope-to-user context.params', context.params)
     const foundItem = await context.app.service('scope').Model.findAll({
       where: {
-        userId: context.arguments[0]
+        userId: context.arguments[0],
+        organizationId: context.params.organization.id
       }
     })
     if (!foundItem.length) {
@@ -17,7 +19,7 @@ export default () => {
           await context.app.service('scope').create({
             type: el,
             userId: context.arguments[0],
-            organizationId: context.params.organizationId
+            organizationId: context.params.organization.id
           })
         })
       }
@@ -27,7 +29,7 @@ export default () => {
           await context.app.service('scope').create({
             type: el.type,
             userId: context.arguments[0],
-            organizationId: context.params.organizationId
+            organizationId: context.params.organization.id
           })
         })
       }
@@ -37,7 +39,7 @@ export default () => {
           await context.app.service('scope').create({
             type: el.type,
             userId: context.arguments[0],
-            organizationId: context.params.organizationId
+            organizationId: context.params.organization.id
           })
         })
       }
@@ -64,7 +66,7 @@ export default () => {
           await context.app.service('scope').create({
             type: el.type,
             userId: context.arguments[0],
-            organizationId: context.params.organizationId
+            organizationId: context.params.organization.id
           })
         })
       }
@@ -77,7 +79,7 @@ export default () => {
           await context.app.service('scope').create({
             type: el.type,
             userId: context.arguments[0],
-            organizationId: context.params.organizationId
+            organizationId: context.params.organization.id
           })
         })
       }
