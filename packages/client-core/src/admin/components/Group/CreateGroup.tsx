@@ -17,7 +17,7 @@ import AutoComplete from '../../common/AutoComplete'
 import { validateForm } from '../../common/validation/formValidation'
 import { GroupService } from '../../services/GroupService'
 import { ScopeTypeService, useScopeTypeState } from '../../services/ScopeTypeService'
-import { useStyles } from '../../styles/ui'
+import styles from '../../styles/admin.module.scss'
 
 interface Props {
   open: boolean
@@ -31,10 +31,8 @@ interface ScopeData {
 
 const CreateGroup = (props: Props) => {
   const { open, handleClose } = props
-  const classes = useStyles()
   const user = useAuthState().user
   const adminScopeTypeState = useScopeTypeState()
-  const adminScopeTypes = adminScopeTypeState.scopeTypes
   const { t } = useTranslation()
 
   const [state, setState] = useState({
@@ -92,19 +90,16 @@ const CreateGroup = (props: Props) => {
 
   return (
     <React.Fragment>
-      <Drawer classes={{ paper: classes.paperDrawer }} anchor="right" open={open} onClose={() => handleClose(false)}>
-        <Container maxWidth="sm" className={classes.marginTp}>
+      <Drawer classes={{ paper: styles.paperDrawer }} anchor="right" open={open} onClose={() => handleClose(false)}>
+        <Container maxWidth="sm" className={styles.mt20}>
           <form onSubmit={(e) => onSubmitHandler(e)}>
-            <DialogTitle id="form-dialog-title" className={classes.texAlign}>
+            <DialogTitle id="form-dialog-title" className={styles.textAlign}>
               {t('admin:components.group.createNewGroup')}
             </DialogTitle>
             <label>{t('admin:components.group.name')}</label>
-            <Paper
-              component="div"
-              className={state.formErrors.name.length > 0 ? classes.redBorder : classes.createInput}
-            >
+            <Paper component="div" className={state.formErrors.name.length > 0 ? styles.redBorder : styles.createInput}>
               <InputBase
-                className={classes.input}
+                className={styles.input}
                 name="name"
                 placeholder={t('admin:components.group.enterGroupName')}
                 style={{ color: '#fff' }}
@@ -116,10 +111,10 @@ const CreateGroup = (props: Props) => {
             <label>{t('admin:components.group.description')}</label>
             <Paper
               component="div"
-              className={state.formErrors.description.length > 0 ? classes.redBorder : classes.createInput}
+              className={state.formErrors.description.length > 0 ? styles.redBorder : styles.createInput}
             >
               <InputBase
-                className={classes.input}
+                className={styles.input}
                 name="description"
                 placeholder={t('admin:components.group.enterGroupDescription')}
                 style={{ color: '#fff' }}
@@ -129,8 +124,8 @@ const CreateGroup = (props: Props) => {
               />
             </Paper>
             <AutoComplete data={scopeData} label="Grant Scope" handleChangeScopeType={handleChangeScopeType} />
-            <DialogActions className={classes.marginTp}>
-              <Button type="submit" className={classes.saveBtn}>
+            <DialogActions className={styles.mt20}>
+              <Button type="submit" className={styles.submitButton}>
                 {t('admin:components.group.submit')}
               </Button>
               <Button
@@ -143,7 +138,7 @@ const CreateGroup = (props: Props) => {
                   })
                   handleClose(false)
                 }}
-                className={classes.saveBtn}
+                className={styles.cancelButton}
               >
                 {t('admin:components.group.cancel')}
               </Button>

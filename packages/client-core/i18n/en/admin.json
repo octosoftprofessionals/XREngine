@@ -1,6 +1,6 @@
 {
   "components": {
-    "locationModel": {
+    "locationModal": {
       "lbl-name": "Name",
       "lbl-maxuser": "Max Users",
       "lbl-scene": "Scene",
@@ -22,6 +22,7 @@
       "createNewLocation": "Create New Location",
       "selectScene": "Select scene",
       "private": "Private",
+      "type": "Type",
       "selectType": "Select type",
       "submit": "Submit",
       "fillRequiredFields": "Please fill all required field",
@@ -232,6 +233,13 @@
       "key": "Key",
       "callback": "Callback",
       "appId": "App ID",
+      "appTitle": "App Title",
+      "appSubtitle": "App Subtitle",
+      "appDescription": "App Description",
+      "appBackground": "App Background",
+      "appSocialLinks": "Social Links",
+      "icon": "Icon",
+      "link": "Link",
       "cancel": "Cancel",
       "save": "Save",
       "aws": "AWS",
@@ -301,7 +309,8 @@
       "keyPath": "KeyPath",
       "githubPrivateKey": "Github Private Key",
       "project": "PROJECT",
-      "selectProject": "Select Project"
+      "selectProject": "Select Project",
+      "patchGameserver": "Patch Gameserver"
     },
     "avatar": {
       "fillRequiredFields": "Please fill all required field",

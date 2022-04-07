@@ -4,7 +4,7 @@ import { DataConsumer, DataProducer } from 'mediasoup/node/lib/types'
 import { User } from '@xrengine/common/src/interfaces/User'
 import { UserId } from '@xrengine/common/src/interfaces/UserId'
 import { SpawnPoints } from '@xrengine/engine/src/avatar/AvatarSpawnSystem'
-import checkValidPositionOnGround from '@xrengine/engine/src/common/functions/checkValidPositionOnGround'
+import checkPositionIsValid from '@xrengine/engine/src/common/functions/checkPositionIsValid'
 import { Engine } from '@xrengine/engine/src/ecs/classes/Engine'
 import { Action } from '@xrengine/engine/src/ecs/functions/Action'
 import { getComponent } from '@xrengine/engine/src/ecs/functions/ComponentFunctions'
@@ -62,10 +62,7 @@ export const setupSubdomain = async (transport: SocketWebRTCServerTransport) => 
   } else {
     try {
       // is this needed?
-      await (app.service('instance') as any).Model.update(
-        { ended: true, assigned: false, assignedAt: null },
-        { where: {} }
-      )
+      await app.service('instance').Model.update({ ended: true, assigned: false, assignedAt: null }, { where: {} })
     } catch (error) {
       logger.warn(error)
     }
@@ -141,7 +138,7 @@ export async function getFreeSubdomain(
 }
 
 export async function cleanupOldGameservers(transport: SocketWebRTCServerTransport): Promise<void> {
-  const instances = await (transport.app.service('instance') as any).Model.findAndCountAll({
+  const instances = await transport.app.service('instance').Model.findAndCountAll({
     offset: 0,
     limit: 1000,
     where: {
@@ -294,7 +291,7 @@ export const handleJoinWorld = async (
         const inviterUserObject3d = getComponent(inviterUserAvatarEntity, Object3DComponent)
         inviterUserObject3d.value.translateZ(2)
 
-        const validSpawnablePosition = checkValidPositionOnGround(inviterUserObject3d.value.position)
+        const validSpawnablePosition = checkPositionIsValid(inviterUserObject3d.value.position, false)
 
         if (validSpawnablePosition) {
           spawnPose = {
@@ -328,7 +325,7 @@ export const handleJoinWorld = async (
   for (const action of world.cachedActions as Set<ReturnType<typeof NetworkWorldAction.spawnAvatar>>) {
     // we may have a need to remove the check for the prefab type to enable this to work for networked objects too
     if (action.type === 'network.SPAWN_OBJECT' && action.prefab === 'avatar') {
-      const ownerId = world.userIndexToUserId.get(action.ownerIndex)
+      const ownerId = action.$from
       if (ownerId) {
         const entity = world.getNetworkObject(ownerId, action.networkId)
         if (typeof entity !== 'undefined') {
